@@ -1,0 +1,18 @@
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">{{ title }}</h4>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-primary" type="button" (click)="changeValue(-5)" [disabled]="value === 0">
+                    <i class="mdi mdi-minus"></i>
+                </button>
+            </div>
+            <input #input type="number" class="form-control" [(ngModel)]="value" (ngModelChange)="onChange($event)" placeholder="" aria-label="" aria-describedby="basic-addon1">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="button" (click)="changeValue(+5)" [disabled]="value === 100">
+                    <i class="mdi mdi-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
