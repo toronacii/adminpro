@@ -1,3 +1,5 @@
-<p>
-  progress works!
-</p>
+<app-range title="counter" [value]="value" (changed)="value = $event"></app-range>
+
+<div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" [attr.ariaValuenow]="75" [attr.ariaValuemin]="0" [attr.ariaValuemax]="100" [style.width]="value + '%'"></div>
+</div>
