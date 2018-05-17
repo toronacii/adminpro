@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import swal from 'sweetalert';
@@ -13,10 +14,17 @@ const LOGIN_URL = `${ API }/login`;
   providedIn: 'root'
 })
 export class UserService {
-  private user: User;
-  private token: string;
+  private get user(): User {
+    return JSON.parse(localStorage.getItem('user'));
+  }
+  private get token() {
+    return localStorage.getItem('token');
+  }
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient
+    private router: Router
+  ) {}
 
   login(user: User, rememberMe = false) {
 
@@ -43,6 +51,14 @@ export class UserService {
       );
   }
 
+  logout() {
+    localStorage.removeItem('id');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    this.router.navigate([ '/login' ]);
+  }
+
   create(user: User) {
     return this.http
       .post(USER_URL, user)
@@ -51,12 +67,13 @@ export class UserService {
       );
   }
 
+  isLogged() {
+    return !!this.token;
+  }
+
   private saveSession({ user, token }) {
     localStorage.setItem('id', user._id);
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
-
-    this.user = user;
-    this.token = token;
   }
 }
