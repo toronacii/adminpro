@@ -14,7 +14,9 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     public userService: UserService
-  ) { }
+  ) {
+    this.userService.user$.subscribe(user => this.user = user);
+  }
 
   ngOnInit() {
     this.user = this.userService.user;
@@ -23,12 +25,10 @@ export class ProfileComponent implements OnInit {
   saveProfile(form: NgForm) {
     if (form.valid) {
       let user: User = Object.assign({}, this.user, form.value);
-      
+
       this.userService
         .update(user)
-        .subscribe(userUpdated => {
-          debugger;
-        });
+        .subscribe();
     }
   }
 

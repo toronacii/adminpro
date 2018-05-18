@@ -14,10 +14,11 @@ export class SidebarComponent implements OnInit {
   constructor(
     public sidebar: SidebarService,
     public userService: UserService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.user = this.userService.user;
+    this.userService.user$.subscribe(user => this.user = user);
   }
 
 }

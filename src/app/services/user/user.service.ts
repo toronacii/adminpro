@@ -6,6 +6,7 @@ import { tap, map } from 'rxjs/operators';
 
 import { API } from './../../config';
 import { User } from '../../models/user.model';
+import { Subject } from 'rxjs';
 
 const USER_URL = `${ API }/users`;
 const LOGIN_URL = `${ API }/login`;
@@ -14,15 +15,23 @@ const LOGIN_URL = `${ API }/login`;
   providedIn: 'root'
 })
 export class UserService {
-  public user: User;
-  public token: string;
+  private userSource = new Subject<User>();
+  private tokenSource = new Subject<string>();
+
+  public user$ = this.userSource.asObservable();
+  public token$ = this.tokenSource.asObservable();
+
+  public get user(): User {
+    return JSON.parse(localStorage.getItem('user'));
+  }
+  public get token() {
+    return localStorage.getItem('token');
+  }
 
   constructor(
     private http: HttpClient,
     private router: Router
-  ) {
-    this.loadSession();
-  }
+  ) {}
 
   login(user: User, rememberMe = false) {
 
@@ -35,7 +44,7 @@ export class UserService {
     return this.http
       .post(LOGIN_URL, user)
       .pipe(
-        tap((credentials: any) => this.saveSession(credentials).loadSession()),
+        tap(this.saveSession.bind(this)),
         map(_ => true)
       );
   }
@@ -44,7 +53,7 @@ export class UserService {
     return this.http
       .post(`${ LOGIN_URL }/google`, { token })
       .pipe(
-        tap((credentials: any) => this.saveSession(credentials).loadSession()),
+        tap(this.saveSession.bind(this)),
         map(_ => true)
       );
   }
@@ -69,11 +78,7 @@ export class UserService {
     return this.http
       .put(`${ USER_URL }/${ user._id }?token=${ this.token }`, user)
       .pipe(
-        tap(userUpdated => {
-          this.saveSession({ user: userUpdated, token: this.token });
-          this.user.name = user.name;
-          this.user.email = user.email;
-        })
+        tap(userUpdated => this.saveSession({ user: userUpdated, token: this.token }))
       );
   }
 
@@ -85,11 +90,8 @@ export class UserService {
     localStorage.setItem('id', user._id);
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
-    return this;
-  }
 
-  private loadSession() {
-    this.user = JSON.parse(localStorage.getItem('user')) as User;
-    this.token = localStorage.getItem('token');
+    this.tokenSource.next(token);
+    this.userSource.next(user);
   }
 }
