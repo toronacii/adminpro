@@ -1,0 +1,51 @@
+<div class="row animated fadeIn">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Profile</h4>
+                <h6 class="card-subtitle">{{ user.name }}</h6>
+                <form ngNativeValidate #form="ngForm" (ngSubmit)="saveProfile(form)" class="form p-t-20">
+                    <div class="form-group">
+                        <label for="exampleInputuname">Name</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-user"></i></div>
+                            <input [ngModel]="user.name" name="name" type="text" class="form-control" placeholder="Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-email"></i></div>
+                            <input [ngModel]="user.email" name="email" type="email" class="form-control" placeholder="Enter email" [disabled]="user.google" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                      <i class="fa fa-save"></i>
+                      Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Profile Picture</h4>
+                <h6 class="card-subtitle">User</h6>
+
+                <img src="">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="ti-file"></i></div>
+                    <input class="form-control" type="file">
+                </div>
+
+                <br>
+
+                <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                    <i class="fa fa-save"></i>
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

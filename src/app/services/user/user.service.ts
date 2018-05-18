@@ -14,17 +14,15 @@ const LOGIN_URL = `${ API }/login`;
   providedIn: 'root'
 })
 export class UserService {
-  private get user(): User {
-    return JSON.parse(localStorage.getItem('user'));
-  }
-  private get token() {
-    return localStorage.getItem('token');
-  }
+  public user: User;
+  public token: string;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
     private router: Router
-  ) {}
+  ) {
+    this.loadSession();
+  }
 
   login(user: User, rememberMe = false) {
 
@@ -37,7 +35,7 @@ export class UserService {
     return this.http
       .post(LOGIN_URL, user)
       .pipe(
-        tap(this.saveSession),
+        tap((credentials: any) => this.saveSession(credentials).loadSession()),
         map(_ => true)
       );
   }
@@ -46,7 +44,7 @@ export class UserService {
     return this.http
       .post(`${ LOGIN_URL }/google`, { token })
       .pipe(
-        tap(this.saveSession),
+        tap((credentials: any) => this.saveSession(credentials).loadSession()),
         map(_ => true)
       );
   }
@@ -67,6 +65,18 @@ export class UserService {
       );
   }
 
+  update(user: User) {
+    return this.http
+      .put(`${ USER_URL }/${ user._id }?token=${ this.token }`, user)
+      .pipe(
+        tap(userUpdated => {
+          this.saveSession({ user: userUpdated, token: this.token });
+          this.user.name = user.name;
+          this.user.email = user.email;
+        })
+      );
+  }
+
   isLogged() {
     return !!this.token;
   }
@@ -75,5 +85,11 @@ export class UserService {
     localStorage.setItem('id', user._id);
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
+    return this;
+  }
+
+  private loadSession() {
+    this.user = JSON.parse(localStorage.getItem('user')) as User;
+    this.token = localStorage.getItem('token');
   }
 }

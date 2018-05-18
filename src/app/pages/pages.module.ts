@@ -2,13 +2,16 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
+import { PipesModule } from '../pipes/pipes.module';
 import { PAGES_ROUTES } from './pages.routes';
+import { FormsModule } from '@angular/forms';
 
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
 import { GraphComponent } from './graph/graph.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
     declarations: [
@@ -16,7 +19,8 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
         DashboardComponent,
         ProgressComponent,
         GraphComponent,
-        AccountSettingsComponent
+        AccountSettingsComponent,
+        ProfileComponent
     ],
     exports: [
         DashboardComponent,
@@ -26,7 +30,9 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
     imports: [
         SharedModule,
         PAGES_ROUTES,
-        ComponentsModule
+        ComponentsModule,
+        PipesModule,
+        FormsModule
     ]
 })
 export class PagesModule { }

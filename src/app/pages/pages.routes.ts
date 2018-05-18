@@ -6,6 +6,7 @@ import { PagesComponent } from './pages.component';
 import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { LoginGuard } from '../services';
+import { ProfileComponent } from './profile/profile.component';
 
 const pagesRoutes: Route[] = [
     {
@@ -17,6 +18,7 @@ const pagesRoutes: Route[] = [
             { path: 'progress', component: ProgressComponent, data: { title: 'Progress Bar' } },
             { path: 'graph', component: GraphComponent, data: { title: 'Graphs' } },
             { path: 'account-settings', component: AccountSettingsComponent, data: { title: 'Account Settings' } },
+            { path: 'profile', component: ProfileComponent, data: { title: 'Profile' } },
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
         ]
     }
