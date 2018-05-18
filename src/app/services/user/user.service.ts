@@ -2,11 +2,12 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import swal from 'sweetalert';
+import { Subject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 import { API } from './../../config';
 import { User } from '../../models/user.model';
-import { Subject } from 'rxjs';
+import { UploadFileService } from '../upload-file.service';
 
 const USER_URL = `${ API }/users`;
 const LOGIN_URL = `${ API }/login`;
@@ -30,7 +31,8 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private uploadFileService: UploadFileService
   ) {}
 
   login(user: User, rememberMe = false) {
@@ -80,6 +82,14 @@ export class UserService {
       .pipe(
         tap(userUpdated => this.saveSession({ user: userUpdated, token: this.token }))
       );
+  }
+
+  saveAvatar(fileModel) {
+    return this.uploadFileService
+      .upload(`${ API }/upload/user/${ this.user._id }`, fileModel)
+      .then(user => {
+        this.saveSession({ user, token: this.token });
+      });
   }
 
   isLogged() {

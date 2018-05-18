@@ -11,6 +11,8 @@ import { NgForm } from '@angular/forms';
 export class ProfileComponent implements OnInit {
 
   user: User;
+  file: File;
+  tempImage: string;
 
   constructor(
     public userService: UserService
@@ -28,8 +30,37 @@ export class ProfileComponent implements OnInit {
 
       this.userService
         .update(user)
-        .subscribe();
+        .subscribe(() => swal('Guardado', 'exitosamente', 'success'));
     }
+  }
+
+  changeFile(file: File) {
+    if (!file || !(file instanceof File)) {
+      return;
+    }
+
+    if (!file.type.includes('image')) {
+      swal('Only Images', 'are allowed', 'error');
+      this.file = null;
+      return;
+    }
+
+    this.file = file;
+    this.getFileAsString(fileStr => this.tempImage = fileStr);
+  }
+
+  saveAvatar() {
+
+    this.userService
+      .saveAvatar({ image: this.file })
+      .then(() => swal('Avatar', 'saved successfully', 'success'));
+  }
+
+  getFileAsString(callback) {
+    let reader = new FileReader();
+    reader.readAsDataURL(this.file);
+
+    reader.onloadend = () => callback(reader.result);
   }
 
 }

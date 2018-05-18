@@ -1,3 +1,4 @@
+export { UploadFileService } from './upload-file.service';
 export { LoginGuard } from './guards/login.guard';
 export { UserService } from './user/user.service';
 export { SharedService } from './shared.service';

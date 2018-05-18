@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
@@ -28,6 +29,7 @@ import { ProfileComponent } from './profile/profile.component';
         GraphComponent
     ],
     imports: [
+        CommonModule
         SharedModule,
         PAGES_ROUTES,
         ComponentsModule,

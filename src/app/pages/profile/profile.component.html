@@ -31,17 +31,19 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Profile Picture</h4>
-                <h6 class="card-subtitle">User</h6>
-
-                <img src="">
+                <h6 class="card-subtitle">{{ user.name }}</h6>
+                <div align="center">
+                    <img *ngIf="!tempImage" [src]="user.avatar | image" class="w-150">
+                    <img *ngIf="tempImage" [src]="tempImage" class="w-150">
+                </div>
                 <div class="input-group">
                     <div class="input-group-addon"><i class="ti-file"></i></div>
-                    <input class="form-control" type="file">
+                    <input (change)="changeFile($event.target.files[0])" class="form-control" type="file">
                 </div>
 
                 <br>
 
-                <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                <button (click)="saveAvatar()" [disabled]="!file" type="submit" class="btn btn-success waves-effect waves-light m-r-10">
                     <i class="fa fa-save"></i>
                     Update
                 </button>

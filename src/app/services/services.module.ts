@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SharedService, SettingsService, SidebarService, UserService, LoginGuard } from './';
+import {
+  SharedService,
+  SettingsService,
+  SidebarService,
+  UserService,
+  UploadFileService,
+  LoginGuard
+} from './';
 
 @NgModule({
   imports: [
@@ -12,6 +19,7 @@ import { SharedService, SettingsService, SidebarService, UserService, LoginGuard
     SharedService,
     SidebarService,
     UserService,
+    UploadFileService,
     LoginGuard
   ]
 })
