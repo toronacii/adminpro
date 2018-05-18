@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
 
       this.userService
         .update(user)
-        .subscribe(() => swal('Guardado', 'exitosamente', 'success'));
+        .subscribe();
     }
   }
 

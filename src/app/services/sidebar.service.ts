@@ -13,6 +13,15 @@ export class SidebarService {
         { title: 'Progress Bar', path: '/progress' },
         { title: 'Graph', path: '/graph' },
       ]
+    },
+    {
+      title: 'Maintenance',
+      icon: 'mdi mdi-folder-lock-open',
+      submenu: [
+        { title: 'Users', path: '/users' },
+        { title: 'Hospitals', path: '/hospitals' },
+        { title: 'Doctors', path: '/doctors' },
+      ]
     }
   ];
 

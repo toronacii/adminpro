@@ -13,6 +13,9 @@ import { ProgressComponent } from './progress/progress.component';
 import { GraphComponent } from './graph/graph.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { ProfileComponent } from './profile/profile.component';
+import { UsersComponent } from './users/users.component';
+import { HospitalsComponent } from './hospitals/hospitals.component';
+import { DoctorsComponent } from './doctors/doctors.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +24,10 @@ import { ProfileComponent } from './profile/profile.component';
         ProgressComponent,
         GraphComponent,
         AccountSettingsComponent,
-        ProfileComponent
+        ProfileComponent,
+        UsersComponent,
+        HospitalsComponent,
+        DoctorsComponent
     ],
     exports: [
         DashboardComponent,
@@ -29,7 +35,7 @@ import { ProfileComponent } from './profile/profile.component';
         GraphComponent
     ],
     imports: [
-        CommonModule
+        CommonModule,
         SharedModule,
         PAGES_ROUTES,
         ComponentsModule,

@@ -2,15 +2,17 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import swal from 'sweetalert';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 import { API } from './../../config';
 import { User } from '../../models/user.model';
+import { Page } from '../../models/page.model';
 import { UploadFileService } from '../upload-file.service';
 
 const USER_URL = `${ API }/users`;
 const LOGIN_URL = `${ API }/login`;
+const SEARCH_USERS_URL = `${ API }/search/users`;
 
 @Injectable({
   providedIn: 'root'
@@ -80,7 +82,12 @@ export class UserService {
     return this.http
       .put(`${ USER_URL }/${ user._id }?token=${ this.token }`, user)
       .pipe(
-        tap(userUpdated => this.saveSession({ user: userUpdated, token: this.token }))
+        tap((userUpdated: User) => {
+          if (user._id === userUpdated._id) {
+            this.saveSession({ user: userUpdated, token: this.token });
+          }
+          swal('User Updated', 'successfully', 'success');
+        })
       );
   }
 
@@ -90,6 +97,21 @@ export class UserService {
       .then(user => {
         this.saveSession({ user, token: this.token });
       });
+  }
+
+  load(from: number): Observable<Page<User>> {
+    return this.http.get(`${ USER_URL }?limit=5&offset=${ from }`) as any;
+  }
+
+  search(from: number, searchTerm: string): Observable<Page<User>> {
+      return this.http.get(`${ SEARCH_USERS_URL }/${ searchTerm }?limit=5&offset=${ from }`) as any;
+  }
+
+  delete(id: string) {
+    return this.http.delete(`${ USER_URL }/${ id }?token=${ this.token }`)
+    .pipe(
+      tap(() => swal('User Deleted', 'successfully', 'warning'))
+    );
   }
 
   isLogged() {

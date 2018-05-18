@@ -1,0 +1,69 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <input (keyup)="searchTerm$.next($event.target.value)" type="text" class="form-control" placeholder="Search users...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row animated fadeIn" *ngIf="loading">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Loading</strong>
+            <br>
+            <i class="fa fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Wait please</span>
+        </div>
+    </div>
+</div>
+
+<div class="row animated fadeIn" *ngIf="!loading">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    Users registers (<small>{{ total }}</small>)
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Auth</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users">
+                            <td><img class="img-50 img-circle" [src]="user.avatar | image"></td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>
+                                <select class="form-control" [(ngModel)]="user.role" name="role">
+                                    <option value="ADMIN_ROLE">ADMIN_ROLE</option>
+                                    <option value="USER_ROLE">USER_ROLE</option>
+                                </select>
+                            </td>
+                            <td>
+                                <label *ngIf="user.google" class="label label-danger">Google</label>
+                                <label *ngIf="!user.google" class="label label-info">Normal</label>
+                            </td>
+                            <td>
+                                <button (click)="update(user)" class="btn btn-primary"><i class="fa fa-save"></i></button>&nbsp;
+                                <button (click)="delete(user)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button class="btn btn-secondary" (click)="paginate(-5)">Prev</button>&nbsp;
+                <button class="btn btn-secondary" (click)="paginate(5)">Next</button>
+            </div>
+        </div>
+    </div>
+</div>

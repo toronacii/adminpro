@@ -7,6 +7,9 @@ import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { LoginGuard } from '../services';
 import { ProfileComponent } from './profile/profile.component';
+import { UsersComponent } from './users/users.component';
+import { HospitalsComponent } from './hospitals/hospitals.component';
+import { DoctorsComponent } from './doctors/doctors.component';
 
 const pagesRoutes: Route[] = [
     {
@@ -19,6 +22,10 @@ const pagesRoutes: Route[] = [
             { path: 'graph', component: GraphComponent, data: { title: 'Graphs' } },
             { path: 'account-settings', component: AccountSettingsComponent, data: { title: 'Account Settings' } },
             { path: 'profile', component: ProfileComponent, data: { title: 'Profile' } },
+
+            { path: 'users', component: UsersComponent, data: { title: 'Users' } },
+            { path: 'hospitals', component: HospitalsComponent, data: { title: 'Hospitals' } },
+            { path: 'doctors', component: DoctorsComponent, data: { title: 'Doctors' } },
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
         ]
     }
