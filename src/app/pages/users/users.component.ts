@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 declare var swal: any;
 
 import { User } from '../../models/user.model';
-import { UserService } from '../../services';
+import { UserService, ModalUploadImageService } from '../../services';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
@@ -23,7 +23,8 @@ export class UsersComponent implements OnInit {
   loading = false;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private modalUploadImageService: ModalUploadImageService
   ) {
     this.searchTerm$
       .asObservable()
@@ -93,6 +94,12 @@ export class UsersComponent implements OnInit {
     this.userService
       .update(user)
       .subscribe();
+  }
+
+  openUploadImageModal(user: User) {
+    this.modalUploadImageService
+      .open({ type: 'user', id: user._id, img: user.avatar })
+      .subscribe(this.load.bind(this));
   }
 
 }

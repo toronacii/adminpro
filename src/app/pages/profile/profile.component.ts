@@ -50,7 +50,6 @@ export class ProfileComponent implements OnInit {
   }
 
   saveAvatar() {
-
     this.userService
       .saveAvatar({ image: this.file })
       .then(() => swal('Avatar', 'saved successfully', 'success'));

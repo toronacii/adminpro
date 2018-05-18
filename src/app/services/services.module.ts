@@ -7,6 +7,7 @@ import {
   SidebarService,
   UserService,
   UploadFileService,
+  ModalUploadImageService,
   LoginGuard
 } from './';
 
@@ -20,6 +21,7 @@ import {
     SidebarService,
     UserService,
     UploadFileService,
+    ModalUploadImageService,
     LoginGuard
   ]
 })
