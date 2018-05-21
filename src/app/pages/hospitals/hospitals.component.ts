@@ -98,7 +98,7 @@ export class HospitalsComponent implements OnInit {
     .then((name: string) => {
       if (name) {
         return this.hospitalService
-          .create(name)
+          .create(new Hospital(name))
           .subscribe(this.load.bind(this));
       }
     })
