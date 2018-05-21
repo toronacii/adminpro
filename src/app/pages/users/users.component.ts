@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
+import { ResourcesBaseComponent } from '../resources-base.component';
+import { UserService } from '../../services/user/user.service';
+import { ModalUploadImageService } from '../../services';
 import { User } from '../../models/user.model';
-import { UserService, ModalUploadImageService } from '../../services';
 
 declare var swal: any;
 
@@ -12,94 +14,28 @@ declare var swal: any;
   templateUrl: './users.component.html',
   styles: []
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent extends ResourcesBaseComponent<User> implements OnInit {
 
-  users: User[] = [];
-  from: number = 0;
-  total: number = 0;
-  searchTerm$ = new Subject<string>();
-  private searchTerm: string = '';
-
-  loading = false;
+  get users() {
+    return this.items;
+  }
 
   constructor(
-    private userService: UserService,
-    private modalUploadImageService: ModalUploadImageService
+    userService: UserService,
+    modalUploadImageService: ModalUploadImageService
   ) {
-    this.searchTerm$
-      .asObservable()
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        tap(searchTerm => {
-          this.searchTerm = searchTerm;
-          this.from = 0;
-        })
-      )
-      .subscribe(this.load.bind(this));
+    super(userService, modalUploadImageService);
   }
 
   ngOnInit() {
     this.load();
   }
 
-  load() {
-    this.loading = true;
-    let observable = this.userService.load(this.from);
-    if (this.searchTerm.length) {
-      observable = this.userService.search(this.from, this.searchTerm);
-    }
-    observable.subscribe(data => {
-        this.loading = false;
-        this.total = data.total;
-        this.users = data.results;
-      });
-  }
-
-  paginate(from: number) {
-    let _from = this.from + from;
-    if (_from < 0 || _from >= this.total) {
-      return;
-    }
-    this.from = _from;
-    this.load();
-  }
-
   delete(user: User) {
-    if (user._id === this.userService.user._id) {
-      swal('Error', 'Cannot delete yourself', 'error');
-      return;
-    }
-
-    swal({
-      title: 'Are you sure?',
-      text: `You will delete to ${ user.name }`,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: false
-    })
-    .then(willDelete => {
-      if (willDelete) {
-        this.userService
-          .delete(user._id)
-          .subscribe(() => {
-            this.from = 0;
-            this.load();
-          });
-      }
-    });
-  }
-
-  update(user: User) {
-    this.userService
-      .update(user)
-      .subscribe();
+    super.delete(user, `You will delete to ${ user.name }`);
   }
 
   openUploadImageModal(user: User) {
-    this.modalUploadImageService
-      .open({ type: 'user', id: user._id, img: user.avatar })
-      .subscribe(this.load.bind(this));
+    super.openUploadImageModal({ type: 'user', id: user._id, img: user.avatar });
   }
-
 }
