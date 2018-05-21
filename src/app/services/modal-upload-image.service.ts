@@ -30,7 +30,10 @@ export class ModalUploadImageService {
   upload(model: any) {
     return this.uploadFileService
       .upload(`${ API }/upload/${ this.options.type }/${ this.options.id }`, model)
-      .then(response => this.notifier.emit(response))
+      .then(response => {
+        swal('Image', 'upload successfully', 'success');
+        this.notifier.emit(response);
+      })
       .catch(err => this.notifier.emit(err));
   }
 }

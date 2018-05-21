@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-
-declare var swal: any;
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
 import { User } from '../../models/user.model';
 import { UserService, ModalUploadImageService } from '../../services';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+
+declare var swal: any;
 
 @Component({
   selector: 'app-users',

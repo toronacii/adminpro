@@ -1,3 +1,56 @@
-<p>
-  hospitals works!
-</p>
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <input (keyup)="searchTerm$.next($event.target.value)" type="text" class="form-control" placeholder="Search hospitals...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row animated fadeIn" *ngIf="loading">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Loading</strong>
+            <br>
+            <i class="fa fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Wait please</span>
+        </div>
+    </div>
+</div>
+
+<div class="row animated fadeIn" *ngIf="!loading">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    Hospitals registers (<small>{{ total }}</small>)
+                    <button class="btn btn-primary pull-right" (click)="create()">Create</button>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let hospital of hospitals">
+                            <td><img (click)="openUploadImageModal(hospital)" class="img-50 img-circle pointer" [src]="hospital.avatar | image"></td>
+                            <td><input class="form-control" type="text" [(ngModel)]="hospital.name"></td>
+                            <td>
+                                <button (click)="update(hospital)" class="btn btn-primary"><i class="fa fa-save"></i></button>&nbsp;
+                                <button (click)="delete(hospital)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button class="btn btn-secondary" (click)="paginate(-5)">Prev</button>&nbsp;
+                <button class="btn btn-secondary" (click)="paginate(5)">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
