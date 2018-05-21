@@ -1,14 +1,15 @@
-import { Router } from '@angular/router';
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import swal from 'sweetalert';
-import { Subject, Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
 
-import { API } from './../../config';
-import { User } from '../../models/user.model';
-import { Page } from '../../models/page.model';
+import { ResourceBaseService } from '../resource-base.service';
 import { UploadFileService } from '../upload-file.service';
+import { User } from '../../models/user.model';
+import { API } from './../../config';
+
 
 const USER_URL = `${ API }/users`;
 const LOGIN_URL = `${ API }/login`;
@@ -17,7 +18,7 @@ const SEARCH_USERS_URL = `${ API }/search/users`;
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends ResourceBaseService<User> {
   private userSource = new Subject<User>();
   private tokenSource = new Subject<string>();
 
@@ -32,10 +33,12 @@ export class UserService {
   }
 
   constructor(
-    private http: HttpClient,
+    http: HttpClient,
     private router: Router,
     private uploadFileService: UploadFileService
-  ) {}
+  ) {
+    super(http, USER_URL, SEARCH_USERS_URL, () => this.token);
+  }
 
   login(user: User, rememberMe = false) {
 
@@ -71,16 +74,14 @@ export class UserService {
   }
 
   create(user: User) {
-    return this.http
-      .post(USER_URL, user)
+    return super.create(user)
       .pipe(
         tap(() => swal('User Created', user.email, 'success'))
       );
   }
 
   update(user: User) {
-    return this.http
-      .put(`${ USER_URL }/${ user._id }?token=${ this.token }`, user)
+    return super.update(user)
       .pipe(
         tap((userUpdated: User) => {
           if (user._id === userUpdated._id) {
@@ -97,21 +98,6 @@ export class UserService {
       .then(user => {
         this.saveSession({ user, token: this.token });
       });
-  }
-
-  load(from: number): Observable<Page<User>> {
-    return this.http.get(`${ USER_URL }?limit=5&offset=${ from }`) as any;
-  }
-
-  search(from: number, searchTerm: string): Observable<Page<User>> {
-      return this.http.get(`${ SEARCH_USERS_URL }/${ searchTerm }?limit=5&offset=${ from }`) as any;
-  }
-
-  delete(id: string) {
-    return this.http.delete(`${ USER_URL }/${ id }?token=${ this.token }`)
-    .pipe(
-      tap(() => swal('User Deleted', 'successfully', 'warning'))
-    );
   }
 
   isLogged() {

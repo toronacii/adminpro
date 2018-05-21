@@ -4,10 +4,10 @@ import { Page } from '../models/page.model';
 
 export abstract class ResourceBaseService<T> {
     constructor(
-        private http: HttpClient,
+        public http: HttpClient,
         private API_URL: string,
         private API_SEARCH: string,
-        private token: () => string
+        private getToken: () => string
     ) {}
 
     load(from: number): Observable<Page<T>> {
@@ -15,11 +15,11 @@ export abstract class ResourceBaseService<T> {
     }
 
     create(item: T): Observable<T> {
-        return this.http.post(`${ this.API_URL }?token=${ this.token() }`, item) as Observable<T>;
+        return this.http.post(`${ this.API_URL }?token=${ this.getToken() }`, item) as Observable<T>;
     }
 
     update(item: T): Observable<T> {
-        return this.http.put(`${ this.API_URL }/${ item['_id'] }?token=${ this.token() }`, item) as Observable<T>;
+        return this.http.put(`${ this.API_URL }/${ item['_id'] }?token=${ this.getToken() }`, item) as Observable<T>;
     }
 
     get(id: string): Observable<T> {
@@ -27,12 +27,12 @@ export abstract class ResourceBaseService<T> {
     }
 
     delete(id: string): Observable<T> {
-        return this.http.delete(`${ this.API_URL }/${ id }?token=${ this.token() }`) as Observable<T>;
+        return this.http.delete(`${ this.API_URL }/${ id }?token=${ this.getToken() }`) as Observable<T>;
     }
 
     search(from: number, searchTerm: string): Observable<Page<T>> {
         return this.http.get(
-            `${ this.API_SEARCH }/${ searchTerm }?token=${ this.token() }&limit=5&offset=${ from }`
+            `${ this.API_SEARCH }/${ searchTerm }?token=${ this.getToken() }&limit=5&offset=${ from }`
         ) as Observable<Page<T>>;
     }
 }
