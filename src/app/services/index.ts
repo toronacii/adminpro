@@ -1,5 +1,6 @@
 export { UploadFileService } from './upload-file.service';
 export { LoginGuard } from './guards/login.guard';
+export { AdminGuard } from './guards/admin.guard';
 export { SharedService } from './shared.service';
 export { SettingsService } from './settings.service';
 export { SidebarService } from './sidebar.service';

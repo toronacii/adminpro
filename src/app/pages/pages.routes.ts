@@ -5,12 +5,13 @@ import { GraphComponent } from './graph/graph.component';
 import { PagesComponent } from './pages.component';
 import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
-import { LoginGuard } from '../services';
+import { LoginGuard, AdminGuard } from '../services';
 import { ProfileComponent } from './profile/profile.component';
 import { UsersComponent } from './users/users.component';
 import { HospitalsComponent } from './hospitals/hospitals.component';
 import { DoctorsComponent } from './doctors/doctors.component';
 import { DoctorComponent } from './doctors/doctor.component';
+import { SearchComponent } from './search/search.component';
 
 const pagesRoutes: Route[] = [
     {
@@ -23,8 +24,14 @@ const pagesRoutes: Route[] = [
             { path: 'graph', component: GraphComponent, data: { title: 'Graphs' } },
             { path: 'account-settings', component: AccountSettingsComponent, data: { title: 'Account Settings' } },
             { path: 'profile', component: ProfileComponent, data: { title: 'Profile' } },
+            { path: 'search/:term', component: SearchComponent, data: { title: 'Search' } },
 
-            { path: 'users', component: UsersComponent, data: { title: 'Users' } },
+            {
+                path: 'users',
+                component: UsersComponent,
+                data: { title: 'Users' },
+                canActivate: [ AdminGuard ]
+            },
             { path: 'hospitals', component: HospitalsComponent, data: { title: 'Hospitals' } },
             { path: 'doctors', component: DoctorsComponent, data: { title: 'Doctors' } },
             { path: 'doctor/:id', component: DoctorComponent, data: { title: 'Doctor' } },

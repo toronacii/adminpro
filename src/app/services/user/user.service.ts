@@ -21,15 +21,20 @@ const SEARCH_USERS_URL = `${ API }/search/users`;
 export class UserService extends ResourceBaseService<User> {
   private userSource = new Subject<User>();
   private tokenSource = new Subject<string>();
+  private menuSource = new Subject<any[]>();
 
   public user$ = this.userSource.asObservable();
   public token$ = this.tokenSource.asObservable();
+  public menu$ = this.menuSource.asObservable();
 
   public get user(): User {
     return JSON.parse(localStorage.getItem('user'));
   }
   public get token() {
     return localStorage.getItem('token');
+  }
+  public get menu() {
+    return JSON.parse(localStorage.getItem('menu'));
   }
 
   constructor(
@@ -69,6 +74,7 @@ export class UserService extends ResourceBaseService<User> {
     localStorage.removeItem('id');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('menu');
 
     this.router.navigate([ '/login' ]);
   }
@@ -85,7 +91,7 @@ export class UserService extends ResourceBaseService<User> {
       .pipe(
         tap((userUpdated: User) => {
           if (user._id === userUpdated._id) {
-            this.saveSession({ user: userUpdated, token: this.token });
+            this.saveSession({ user: userUpdated, token: this.token, menu: this.menu });
           }
           swal('User Updated', 'successfully', 'success');
         })
@@ -96,7 +102,7 @@ export class UserService extends ResourceBaseService<User> {
     return this.uploadFileService
       .upload(`${ API }/upload/user/${ this.user._id }`, fileModel)
       .then(user => {
-        this.saveSession({ user, token: this.token });
+        this.saveSession({ user, token: this.token, menu: this.menu });
       });
   }
 
@@ -104,12 +110,14 @@ export class UserService extends ResourceBaseService<User> {
     return !!this.token;
   }
 
-  private saveSession({ user, token }) {
+  private saveSession({ user, token, menu }) {
     localStorage.setItem('id', user._id);
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('menu', JSON.stringify(menu));
 
     this.tokenSource.next(token);
     this.userSource.next(user);
+    this.menuSource.next(menu);
   }
 }

@@ -8,6 +8,7 @@ import {
   UploadFileService,
   ModalUploadImageService,
   LoginGuard,
+  AdminGuard,
   UserService,
   HospitalService,
   DoctorService
@@ -24,6 +25,7 @@ import {
     UploadFileService,
     ModalUploadImageService,
     LoginGuard,
+    AdminGuard,
     UserService,
     HospitalService,
     DoctorService
