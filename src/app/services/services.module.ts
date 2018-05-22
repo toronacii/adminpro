@@ -5,10 +5,12 @@ import {
   SharedService,
   SettingsService,
   SidebarService,
-  UserService,
   UploadFileService,
   ModalUploadImageService,
-  LoginGuard
+  LoginGuard,
+  UserService,
+  HospitalService,
+  DoctorService
 } from './';
 
 @NgModule({
@@ -19,10 +21,12 @@ import {
     SettingsService,
     SharedService,
     SidebarService,
-    UserService,
     UploadFileService,
     ModalUploadImageService,
-    LoginGuard
+    LoginGuard,
+    UserService,
+    HospitalService,
+    DoctorService
   ]
 })
 export class ServicesModule { }

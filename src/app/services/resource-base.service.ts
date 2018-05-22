@@ -10,8 +10,14 @@ export abstract class ResourceBaseService<T> {
         private getToken: () => string
     ) {}
 
-    load(from: number): Observable<Page<T>> {
-        return this.http.get(`${ this.API_URL }?limit=5&offset=${ from }`) as any;
+    load(from: number = 0, limit: number = 5): Observable<Page<T>> {
+        let params = {
+            offset: from.toString()
+        };
+        if (limit > 0 && limit !== Infinity) {
+            params['limit'] = limit.toString();
+        }
+        return this.http.get(this.API_URL, { params }) as any;
     }
 
     create(item: T): Observable<T> {
