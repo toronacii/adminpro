@@ -5,9 +5,11 @@ declare function load_plugins();
 @Component({
   selector: 'app-nopagefound',
   templateUrl: './nopagefound.component.html',
-  styles: []
+  styleUrls: ['./style.css']
 })
 export class NopagefoundComponent implements OnInit {
+
+  year: number = new Date().getFullYear();
 
   constructor() { }
 
